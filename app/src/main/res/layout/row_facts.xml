@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_main_row"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/imv_dog_row"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:src="@drawable/dog1"/>
+
+    <TextView
+        android:id="@+id/tv_fact_row"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PRUEBA"
+        android:layout_marginLeft="30dp"
+        android:textSize="15dp"
+        />
+</LinearLayout>

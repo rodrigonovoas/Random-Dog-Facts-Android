@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!--  PET 1  -->
+
+    <color name="dog1_color_1">#dea45f</color>
+    <color name="dog1_color_2">#AD7249</color>
+    <color name="dog1_color_3">#7C3F32</color>
+
+    <!--  PET 2  -->
+
+    <color name="dog2_color_1">#4F4C5F</color>
+    <color name="dog2_color_2">#9C7A71</color>
+    <color name="dog2_color_3">#E8A882</color>
+
+    <!--  PET 3  -->
+
+    <color name="dog3_color_1">#E2E2E2</color>
+    <color name="dog3_color_2">#F1B5C0</color>
+    <color name="dog3_color_3">#FF889E</color>
+
+    <!--  PET 4  -->
+
+    <color name="dog4_color_1">#A19DAE</color>
+    <color name="dog4_color_2">#726E7F</color>
+    <color name="dog4_color_3">#423E4F</color>
+
+</resources>
