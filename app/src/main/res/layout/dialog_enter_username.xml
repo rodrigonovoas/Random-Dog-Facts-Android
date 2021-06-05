@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="textStart"
         android:textSize="16dp"
-        android:text="ENTER YOUR USERNAME:" />
+        android:text="@string/username_dialog_enter_username" />
 
     <EditText
         android:id="@+id/edt_username"
@@ -19,8 +19,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_title"
-        android:hint="Name"/>
+        android:layout_below="@id/tv_title" />
 
     <Button
         android:id="@+id/btn_continue"

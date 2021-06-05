@@ -15,7 +15,7 @@ interface UserDAO {
     suspend fun deleteAllUsers()
 
     @Query("UPDATE user SET facts_num = (facts_num+1)  WHERE id = 1")
-    suspend fun updateSumFactsNum()
+    suspend fun updateSumFactsNum(): Int
 
     @Query("UPDATE user SET favfacts_num = (favfacts_num-1)  WHERE id = 1")
     suspend fun updateSubFavsNum()

@@ -17,7 +17,7 @@
         android:id="@+id/tv_fact_row"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PRUEBA"
+        android:text=""
         android:layout_marginLeft="30dp"
         android:textSize="15dp"
         />
