@@ -53,6 +53,7 @@ class HomeViewModel : ViewModel() {
     fun addFact(fact: Fact, repository: FactsRepository){
         val newFact = FactModel(0,fact.facts[0])
         viewModelScope.launch {
+            repository.addFactNum()
             val id = repository.insertFact(newFact)
             setCurrentFact(FactModel(id.toInt(),fact.facts[0]))
         }
