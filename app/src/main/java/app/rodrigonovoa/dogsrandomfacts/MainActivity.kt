@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.concurrent.CountDownLatch
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,11 +32,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val prefs = Prefs(this)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val prefs = Prefs(this)
         val navView: BottomNavigationView = binding.navView
+
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
         navView.setupWithNavController(navController)
@@ -63,16 +64,18 @@ class MainActivity : AppCompatActivity() {
                 prefs.name = text.toString()
             }
 
-            updateUsername(text.toString())
+            insertUser(Singleton.getRepository(),text.toString())
             dialog.dismiss()
         }
 
         dialog.show()
     }
 
-    private fun updateUsername(name:String){
-        lifecycleScope.launch(){
-            Singleton.getRepository().updateUsername(name)
+    fun insertUser(repository: FactsRepository, username:String){
+        val user = UserModel(1,username,0,0,0,0)
+
+        lifecycleScope.launch {
+            repository.insertUser(user)
         }
     }
 }

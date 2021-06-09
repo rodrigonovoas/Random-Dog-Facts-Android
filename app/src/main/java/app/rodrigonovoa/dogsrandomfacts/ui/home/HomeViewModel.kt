@@ -2,7 +2,10 @@ package app.rodrigonovoa.dogsrandomfacts.ui.home
 
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.lifecycle.*
 import app.rodrigonovoa.dogsrandomfacts.R
 import app.rodrigonovoa.dogsrandomfacts.database.FactModel
@@ -20,13 +23,10 @@ import retrofit2.Response
 class HomeViewModel : ViewModel() {
 
     private lateinit var change_pet:MutableLiveData<Boolean>
-    private lateinit var show_toast:MutableLiveData<Boolean>
     private lateinit var currentFact:FactModel
-    private var toast_text:String = ""
 
     fun init(){
         change_pet = MutableLiveData<Boolean>()
-        show_toast = MutableLiveData<Boolean>()
     }
 
     fun setCurrentFact(fact:FactModel){
@@ -41,20 +41,11 @@ class HomeViewModel : ViewModel() {
         return this.change_pet
     }
 
-    fun show_toast():MutableLiveData<Boolean>{
-        return this.show_toast
-    }
-
-    fun getToastText():String{
-        return toast_text
-    }
-
     fun addFact(fact: Fact, repository: FactsRepository){
         val newFact = FactModel(0,fact.facts[0])
         viewModelScope.launch {
             val id = repository.insertFact(newFact)
-            val facts = repository.addFactNum()
-            Log.d("aaa --- pruebas",facts.toString())
+            repository.addFactNum()
             setCurrentFact(FactModel(id.toInt(),fact.facts[0]))
         }
     }
@@ -94,20 +85,10 @@ class HomeViewModel : ViewModel() {
     }
 
     fun addFav(repository: FactsRepository){
-        val factid = getCurrentFact().id
-        val newFav = FavModel(0,factid,1)
+        val newFav = FavModel(0,getCurrentFact().id,1)
         viewModelScope.launch {
-            val facts = repository.getFavByFactId(factid)
-
-            if(facts.size == 0){
-                toast_text = "Added to favs. list"
-                repository.addFavNum()
-                repository.insertFav(newFav)
-            }else{
-                toast_text = "Fact already added"
-            }
-
-            show_toast.value = true
+            repository.addFavNum()
+            repository.insertFav(newFav)
         }
     }
 

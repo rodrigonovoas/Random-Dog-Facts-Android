@@ -67,8 +67,8 @@ class FactsRepository(factsDB:FactRoomDb) {
     }
 
     @WorkerThread
-    suspend fun addFactNum():Int {
-        return userDAO.updateSumFactsNum()
+    suspend fun addFactNum() {
+        userDAO.updateSumFactsNum()
     }
 
     @WorkerThread

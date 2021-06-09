@@ -103,15 +103,13 @@ class FactsRecyclerAdapter(private val factsDataList: MutableList<FactModel>, pr
     }
 
     private fun openAddToFavsDialog(context:Context, fact_id:Int, repository:FactsRepository){
-        val resource = context.resources
         val builder = AlertDialog.Builder(context)
-        //resource.getString(R.string.)
-        builder.setMessage(resource.getString(R.string.facts_dialog_title))
-            .setPositiveButton(resource.getString(R.string.facts_dialog_option1),
+        builder.setMessage("Do you want to add it to Favs list?")
+            .setPositiveButton("Yes",
                 DialogInterface.OnClickListener { dialog, id ->
                     addToFavs(repository, fact_id)
                 })
-            .setNegativeButton(resource.getString(R.string.facts_dialog_option2),
+            .setNegativeButton("No",
                 DialogInterface.OnClickListener { dialog, id ->
                     return@OnClickListener
                 })

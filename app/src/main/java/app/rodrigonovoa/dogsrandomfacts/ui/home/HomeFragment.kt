@@ -1,7 +1,6 @@
 package app.rodrigonovoa.dogsrandomfacts.ui.home
 
 import android.R.attr.label
-import android.R.attr.resource
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -66,17 +65,12 @@ class HomeFragment : Fragment() {
             }
         });
 
-        homeViewModel.show_toast().observe(viewLifecycleOwner, Observer { it ->
-            if(it){
-                Toast.makeText(context,homeViewModel.getToastText(),Toast.LENGTH_SHORT).show()
-            }
-        });
-
         imv_next_fact.setOnClickListener() {
             homeViewModel.getFact(repository,service,tv_fact,pb_fact)
         }
 
         imv_fav.setOnClickListener(){
+            Toast.makeText(requireContext(),"Added to Fav list.", Toast.LENGTH_SHORT).show()
             homeViewModel.addFav(repository)
         }
 
@@ -93,7 +87,7 @@ class HomeFragment : Fragment() {
 
             myClipboard.setPrimaryClip(clip)
 
-            Toast.makeText(requireContext(),resources.getString(R.string.home_text_copied), Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),"Text Copied.", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -5,16 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.facts.FactsFragment"
-    android:background="@color/dog3_color_2">
+    tools:context=".ui.facts.FactsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:padding="10dp"
-        android:layout_below="@+id/tv_activity_title">
+        android:background="@color/dog3_color_2"
+        android:padding="10dp">
 
         <LinearLayout
             android:padding="10dp"
@@ -44,17 +43,6 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_activity_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/facts_title"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="20dp"
-        android:fontFamily="@font/viga"
-        android:textSize="30dp"
-        android:textColor="@color/dog3_color_1" />
-
     <ProgressBar
         android:id="@+id/pb_facts"
         android:layout_width="wrap_content"
@@ -62,6 +50,5 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"/>
-
 
 </RelativeLayout>

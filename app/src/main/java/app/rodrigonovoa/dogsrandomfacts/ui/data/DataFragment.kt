@@ -56,12 +56,13 @@ class DataFragment : Fragment() {
         val prefs = Prefs(requireContext())
 
         if(prefs.skip_splash){
-            tv_skip_splash.text = getString(R.string.data_data_skip)
+            tv_skip_splash.text = "skipped"
         }else{
-            tv_skip_splash.text = getString(R.string.data_data_no_skip)
+            tv_skip_splash.text = "not skipped"
         }
 
         imv_contactemail.setOnClickListener(){
+
             if(tv_contactemail.visibility == View.VISIBLE){
                 tv_contactemail.visibility = View.INVISIBLE
             }else{
@@ -79,9 +80,9 @@ class DataFragment : Fragment() {
 
             if(prefs.skip_splash){
                 prefs.skip_splash = false
-                tv_skip_splash.text = getString(R.string.data_data_no_skip)
+                tv_skip_splash.text = "not skipped"
             }else{
-                tv_skip_splash.text = getString(R.string.data_data_skip)
+                tv_skip_splash.text = "skipped"
                 prefs.skip_splash = true
             }
         }

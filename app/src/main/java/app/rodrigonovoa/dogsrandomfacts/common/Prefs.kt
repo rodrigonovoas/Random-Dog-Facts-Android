@@ -7,7 +7,6 @@ class Prefs (context: Context) {
     private val PREFS = "app.rodrigonovoa.dogsrandomfacts.prefs"
     private val SHARED_USERNAME = "SHARED_USERNAME"
     private val SHARED_SKIP_SPLASH = "SHARED_SKIP_SPLASH"
-    private val SHARED_FIRST_OPENING = "SHARED_FIRST_OPENING"
 
     val prefs: SharedPreferences = context.getSharedPreferences(PREFS, 0)
 
@@ -18,8 +17,4 @@ class Prefs (context: Context) {
     var skip_splash: Boolean
         get() = prefs.getBoolean(SHARED_SKIP_SPLASH, false)
         set(value) = prefs.edit().putBoolean(SHARED_SKIP_SPLASH, value).apply()
-
-    var first_opening: Boolean
-        get() = prefs.getBoolean(SHARED_FIRST_OPENING, true)
-        set(value) = prefs.edit().putBoolean(SHARED_FIRST_OPENING, value).apply()
 }
