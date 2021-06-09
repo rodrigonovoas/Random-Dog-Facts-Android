@@ -43,7 +43,7 @@ class DataViewModel : ViewModel() {
 
     fun openUsernameDialog(repository: FactsRepository, dialog:Dialog, tv_username:TextView){
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
+        dialog.setCancelable(true)
         dialog.setContentView(R.layout.dialog_enter_username)
         dialog.getWindow()!!.setBackgroundDrawableResource(android.R.color.transparent);
 

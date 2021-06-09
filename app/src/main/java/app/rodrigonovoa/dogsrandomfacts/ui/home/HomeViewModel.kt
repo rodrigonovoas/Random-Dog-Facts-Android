@@ -1,5 +1,6 @@
 package app.rodrigonovoa.dogsrandomfacts.ui.home
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -53,8 +54,6 @@ class HomeViewModel : ViewModel() {
         val newFact = FactModel(0,fact.facts[0])
         viewModelScope.launch {
             val id = repository.insertFact(newFact)
-            val facts = repository.addFactNum()
-            Log.d("aaa --- pruebas",facts.toString())
             setCurrentFact(FactModel(id.toInt(),fact.facts[0]))
         }
     }
@@ -93,18 +92,19 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    fun addFav(repository: FactsRepository){
+    fun addFav(context: Context, repository: FactsRepository){
         val factid = getCurrentFact().id
         val newFav = FavModel(0,factid,1)
+
         viewModelScope.launch {
             val facts = repository.getFavByFactId(factid)
 
             if(facts.size == 0){
-                toast_text = "Added to favs. list"
+                toast_text = context.getString(R.string.facts_fav_added)
                 repository.addFavNum()
                 repository.insertFav(newFav)
             }else{
-                toast_text = "Fact already added"
+                toast_text = context.getString(R.string.facts_fav_duplicated)
             }
 
             show_toast.value = true

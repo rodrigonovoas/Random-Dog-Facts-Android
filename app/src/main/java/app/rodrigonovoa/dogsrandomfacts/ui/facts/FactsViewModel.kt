@@ -16,9 +16,9 @@ import kotlinx.coroutines.launch
 
 class FactsViewModel : ViewModel() {
 
-    private lateinit var facts_list:MutableList<FactModel>
-    private lateinit var favs_list:MutableList<FavModel>
-    private lateinit var favs_id_list:MutableList<Int>
+    private var facts_list:MutableList<FactModel> = mutableListOf()
+    private var favs_list:MutableList<FavModel>  = mutableListOf()
+    private var favs_id_list:MutableList<Int> = mutableListOf()
     private lateinit var reload_fragment:MutableLiveData<Boolean>
 
     fun init(){

@@ -53,7 +53,8 @@ class HomeFragment : Fragment() {
         val imv_copy: ImageView = view.findViewById(R.id.imv_copy_text)
         val pb_fact: ProgressBar = view.findViewById(R.id.pb_fact)
 
-        makeViewsVisibleOrInvisible(false,main_layout, tv_title, imv_dog, tv_fact)
+        tv_fact.text = ""
+        makeViewsVisibleOrInvisible(false,main_layout, tv_title, imv_dog, tv_fact, pb_fact)
 
         homeViewModel.init()
         homeViewModel.getFact(repository,service,tv_fact,pb_fact)
@@ -61,7 +62,7 @@ class HomeFragment : Fragment() {
         homeViewModel.change_pet().observe(viewLifecycleOwner, Observer { it ->
             if(it){
                 homeViewModel.getRandomPetDialog(main_layout, tv_title, imv_dog, tv_fact)
-                makeViewsVisibleOrInvisible(true,main_layout, tv_title, imv_dog, tv_fact)
+                makeViewsVisibleOrInvisible(true,main_layout, tv_title, imv_dog, tv_fact, pb_fact)
             }
         });
 
@@ -72,11 +73,12 @@ class HomeFragment : Fragment() {
         });
 
         imv_next_fact.setOnClickListener() {
+            tv_fact.text = ""
             homeViewModel.getFact(repository,service,tv_fact,pb_fact)
         }
 
         imv_fav.setOnClickListener(){
-            homeViewModel.addFav(repository)
+            homeViewModel.addFav(requireContext(), repository)
         }
 
         imv_share.setOnClickListener(){
@@ -107,18 +109,21 @@ class HomeFragment : Fragment() {
         mainLayout: RelativeLayout,
         tv_title: TextView,
         imv_dog: ImageView,
-        tv_fact: TextView
+        tv_fact: TextView,
+        pb: ProgressBar
     ) {
         if (visible) {
-            mainLayout.visibility = View.VISIBLE
-            tv_title.visibility = View.VISIBLE
+           // mainLayout.visibility = View.VISIBLE
+           // tv_title.visibility = View.VISIBLE
             imv_dog.visibility = View.VISIBLE
-            tv_fact.visibility = View.VISIBLE
+           // tv_fact.visibility = View.VISIBLE
+            pb.visibility = View.INVISIBLE
         }else{
-            mainLayout.visibility = View.INVISIBLE
-            tv_title.visibility = View.INVISIBLE
+            pb.visibility = View.VISIBLE
+           // mainLayout.visibility = View.INVISIBLE
+           // tv_title.visibility = View.INVISIBLE
             imv_dog.visibility = View.INVISIBLE
-            tv_fact.visibility = View.INVISIBLE
+          //  tv_fact.visibility = View.INVISIBLE
         }
     }
 

@@ -24,6 +24,9 @@
 
     <string name="facts_title">Facts and Favs</string>
 
+    <string name="facts_fav_added">Added to fav. list</string>
+    <string name="facts_fav_duplicated">Fact already added</string>
+
     <!-- Facts Dialog -->
 
     <string name="facts_dialog_title">Do you want to add it to Favs list?</string>

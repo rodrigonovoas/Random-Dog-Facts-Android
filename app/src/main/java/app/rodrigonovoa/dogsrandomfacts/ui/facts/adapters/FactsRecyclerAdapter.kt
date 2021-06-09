@@ -144,12 +144,13 @@ class FactsRecyclerAdapter(private val factsDataList: MutableList<FactModel>, pr
                 fragment.factsViewModel.setFavs(repository)
 
                 (context as Activity).runOnUiThread(Runnable {
-                    Toast.makeText(fragment.sw_facts.context, "Added to fav. list", Toast.LENGTH_SHORT).show()
+                    fragment.factsViewModel.reloadFragment().value = true
+                    Toast.makeText(context, context.getString(R.string.facts_fav_added), Toast.LENGTH_SHORT).show()
                 })
             }else{
 
                 (context as Activity).runOnUiThread(Runnable {
-                    Toast.makeText(fragment.sw_facts.context, "Fact already added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.facts_fav_duplicated), Toast.LENGTH_SHORT).show()
                 })
             }
         }
