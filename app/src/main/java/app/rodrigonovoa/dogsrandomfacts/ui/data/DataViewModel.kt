@@ -14,12 +14,8 @@ import kotlinx.coroutines.launch
 
 class DataViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
-    }
-    val text: LiveData<String> = _text
-
     fun loadDataFromDb(repository: FactsRepository, tv_username:TextView, tv_facts: TextView, tv_favs:TextView, tv_shared:TextView, tv_opened:TextView){
+
         viewModelScope.launch {
             tv_username.text = tv_username.text.toString() + repository.getUsername()
             tv_facts.text = tv_facts.text.toString() + repository.getFactsNum().toString()
@@ -27,6 +23,7 @@ class DataViewModel : ViewModel() {
             tv_shared.text = tv_shared.text.toString() + repository.getSharedNum().toString()
             tv_opened.text = tv_opened.text.toString() + repository.getOpenedNum().toString()
         }
+
     }
 
     fun openAboutUsDialog(dialog:Dialog){
@@ -53,14 +50,16 @@ class DataViewModel : ViewModel() {
         val btn_accept = dialog.findViewById(R.id.btn_continue) as Button
         val edt_username = dialog.findViewById(R.id.edt_username) as EditText
 
+        val context = btn_accept.context
+
         btn_accept.setOnClickListener(){
             if(edt_username.text.isEmpty()==false){
                 val username = edt_username.text.toString()
                 insertUser(repository, username)
-                tv_username.text = "Username: " + username
+                tv_username.text = context.getString(R.string.data_data_username) + username
                 dialog.dismiss()
             }else{
-                Toast.makeText(btn_accept.context,"Username is empty.",Toast.LENGTH_SHORT).show()
+                Toast.makeText(btn_accept.context,context.getString(R.string.username_dialog_empty),Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
         }

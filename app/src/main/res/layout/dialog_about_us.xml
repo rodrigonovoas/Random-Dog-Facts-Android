@@ -11,8 +11,9 @@
         android:layout_height="wrap_content"
         android:textAlignment="textStart"
         android:textSize="16dp"
-        android:text="
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed vulputate nulla. Nulla facilisi. Donec efficitur arcu ut quam sollicitudin, ut rutrum risus consequat. Sed rutrum, nunc consequat sagittis porta." />
+        android:text="@string/data_about_us"
+        android:autoLink="web"
+        android:linksClickable="true"/>
 
     <Button
         android:id="@+id/btn_return"

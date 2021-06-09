@@ -28,7 +28,7 @@ class DogsRandomFactsApp : Application() {
 
         Singleton.setRepository(repository)
 
-        val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+        //val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
         applicationScope.launch {
             repository.addOpenedNum()

@@ -1,9 +1,8 @@
 package app.rodrigonovoa.dogsrandomfacts.ui.home
 
-import android.R.attr.label
+
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.net.Uri
@@ -12,13 +11,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import app.rodrigonovoa.dogsrandomfacts.R
 import app.rodrigonovoa.dogsrandomfacts.common.Singleton
-import app.rodrigonovoa.dogsrandomfacts.database.*
 import app.rodrigonovoa.dogsrandomfacts.service.WebService
 
 
@@ -56,12 +53,21 @@ class HomeFragment : Fragment() {
         val imv_copy: ImageView = view.findViewById(R.id.imv_copy_text)
         val pb_fact: ProgressBar = view.findViewById(R.id.pb_fact)
 
+        makeViewsVisibleOrInvisible(false,main_layout, tv_title, imv_dog, tv_fact)
+
         homeViewModel.init()
         homeViewModel.getFact(repository,service,tv_fact,pb_fact)
 
         homeViewModel.change_pet().observe(viewLifecycleOwner, Observer { it ->
             if(it){
                 homeViewModel.getRandomPetDialog(main_layout, tv_title, imv_dog, tv_fact)
+                makeViewsVisibleOrInvisible(true,main_layout, tv_title, imv_dog, tv_fact)
+            }
+        });
+
+        homeViewModel.show_toast().observe(viewLifecycleOwner, Observer { it ->
+            if(it){
+                Toast.makeText(context,homeViewModel.getToastText(),Toast.LENGTH_SHORT).show()
             }
         });
 
@@ -70,7 +76,6 @@ class HomeFragment : Fragment() {
         }
 
         imv_fav.setOnClickListener(){
-            Toast.makeText(requireContext(),"Added to Fav list.", Toast.LENGTH_SHORT).show()
             homeViewModel.addFav(repository)
         }
 
@@ -87,7 +92,7 @@ class HomeFragment : Fragment() {
 
             myClipboard.setPrimaryClip(clip)
 
-            Toast.makeText(requireContext(),"Text Copied.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),resources.getString(R.string.home_text_copied), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -95,6 +100,26 @@ class HomeFragment : Fragment() {
         val tweetUrl = ("https://twitter.com/intent/tweet?text=$text")
         val uri: Uri = Uri.parse(tweetUrl)
         startActivity(Intent(Intent.ACTION_VIEW, uri))
+    }
+
+    private fun makeViewsVisibleOrInvisible(
+        visible: Boolean = true,
+        mainLayout: RelativeLayout,
+        tv_title: TextView,
+        imv_dog: ImageView,
+        tv_fact: TextView
+    ) {
+        if (visible) {
+            mainLayout.visibility = View.VISIBLE
+            tv_title.visibility = View.VISIBLE
+            imv_dog.visibility = View.VISIBLE
+            tv_fact.visibility = View.VISIBLE
+        }else{
+            mainLayout.visibility = View.INVISIBLE
+            tv_title.visibility = View.INVISIBLE
+            imv_dog.visibility = View.INVISIBLE
+            tv_fact.visibility = View.INVISIBLE
+        }
     }
 
 }

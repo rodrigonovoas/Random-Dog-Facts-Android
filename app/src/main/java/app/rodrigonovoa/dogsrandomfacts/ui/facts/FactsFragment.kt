@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.rodrigonovoa.dogsrandomfacts.R
+import app.rodrigonovoa.dogsrandomfacts.database.FactModel
 import app.rodrigonovoa.dogsrandomfacts.database.FactRoomDb
 import app.rodrigonovoa.dogsrandomfacts.database.FactsRepository
 
@@ -24,6 +25,7 @@ class FactsFragment : Fragment() {
     lateinit var factsViewModel: FactsViewModel
     lateinit var pb_facts:ProgressBar
     lateinit var sw_facts:Switch
+    lateinit var layout_view:View
     lateinit var repository: FactsRepository
 
     override fun onCreateView(
@@ -45,6 +47,7 @@ class FactsFragment : Fragment() {
         sw_facts = view.findViewById<Switch>(R.id.sw_facts)
         val imv_icon = view.findViewById<ImageView>(R.id.imv_icon)
         pb_facts = view.findViewById<ProgressBar>(R.id.pb_facts)
+        layout_view = view
 
         repository = FactsRepository(factsDB)
 
@@ -52,12 +55,12 @@ class FactsFragment : Fragment() {
 
         factsViewModel.init()
 
-        factsViewModel.setData(repository,pb_facts)
+        factsViewModel.setData(repository)
 
         factsViewModel.reloadFragment().observe(viewLifecycleOwner, Observer { it ->
             if(it){
                 imv_icon.setImageDrawable(resources.getDrawable(R.drawable.facts))
-                factsViewModel.changeFavsToFacts(llm, view, factsViewModel.getFactsList(), this)
+                factsViewModel.changeFavsToFacts(llm, view, factsViewModel.getFactsList(), factsViewModel.getFavsIdList(), this)
                 pb_facts.visibility = View.INVISIBLE
             }
         });
@@ -66,13 +69,19 @@ class FactsFragment : Fragment() {
 
             if(sw_facts.isChecked){
                 imv_icon.setImageDrawable(resources.getDrawable(R.drawable.fav))
-                factsViewModel.changeFactsToFavs(llm,view,factsViewModel.getFactsList(),factsViewModel.getFavsList(), this)
+                reloadFavsList()
+                //factsViewModel.changeFactsToFavs(llm,view,factsViewModel.getFactsList(),factsViewModel.getFavsList(), this)
             }else{
                 imv_icon.setImageDrawable(resources.getDrawable(R.drawable.facts))
-                factsViewModel.changeFavsToFacts(llm,view,factsViewModel.getFactsList(), this)
+                factsViewModel.changeFavsToFacts(llm,view,factsViewModel.getFactsList(), factsViewModel.getFavsIdList(), this)
             }
 
         }
+    }
+
+    fun reloadFavsList(){
+        val llm = LinearLayoutManager(this@FactsFragment.requireContext())
+        factsViewModel.changeFactsToFavs(llm, layout_view, factsViewModel.getFactsList(),factsViewModel.getFavsList(), this)
     }
 
 }

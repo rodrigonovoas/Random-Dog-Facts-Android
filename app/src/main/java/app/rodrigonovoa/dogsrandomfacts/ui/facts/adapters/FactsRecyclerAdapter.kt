@@ -1,8 +1,11 @@
 package app.rodrigonovoa.dogsrandomfacts.ui.facts.adapters
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.opengl.Visibility
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +24,7 @@ import app.rodrigonovoa.dogsrandomfacts.ui.facts.FactsFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class FactsRecyclerAdapter(private val factsDataList: MutableList<FactModel>, private val fragment: FactsFragment) :
+class FactsRecyclerAdapter(private val factsDataList: MutableList<FactModel>, private val favsIdList:MutableList<Int>, private val fragment: FactsFragment) :
     RecyclerView.Adapter<FactsRecyclerAdapter.ViewHolder>() {
 
     /**
@@ -29,13 +32,15 @@ class FactsRecyclerAdapter(private val factsDataList: MutableList<FactModel>, pr
      * (custom ViewHolder).
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        lateinit var tv_fact: TextView
-        lateinit var imv_dog: ImageView
-        lateinit var ll_main: LinearLayout
+        var tv_fact: TextView
+        var imv_dog: ImageView
+        var imv_faved: ImageView
+        var ll_main: LinearLayout
 
         init {
             tv_fact = view.findViewById(R.id.tv_fact_row)
             imv_dog = view.findViewById(R.id.imv_dog_row)
+            imv_faved = view.findViewById(R.id.imv_fact_faved)
             ll_main = view.findViewById(R.id.ll_main_row)
         }
     }
@@ -55,8 +60,14 @@ class FactsRecyclerAdapter(private val factsDataList: MutableList<FactModel>, pr
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.tv_fact.text = factsDataList.get(position).fact
+        viewHolder.imv_faved.visibility = View.INVISIBLE
 
         val id = factsDataList.get(position).id
+
+        if(id in favsIdList){
+            viewHolder.imv_faved.visibility = View.VISIBLE
+        }
+
 
         viewHolder.ll_main.setOnClickListener(){
             openAddToFavsDialog(viewHolder.tv_fact.context,id, Singleton.getRepository())
@@ -103,13 +114,15 @@ class FactsRecyclerAdapter(private val factsDataList: MutableList<FactModel>, pr
     }
 
     private fun openAddToFavsDialog(context:Context, fact_id:Int, repository:FactsRepository){
+        val resource = context.resources
         val builder = AlertDialog.Builder(context)
-        builder.setMessage("Do you want to add it to Favs list?")
-            .setPositiveButton("Yes",
+        //resource.getString(R.string.)
+        builder.setMessage(resource.getString(R.string.facts_dialog_title))
+            .setPositiveButton(resource.getString(R.string.facts_dialog_option1),
                 DialogInterface.OnClickListener { dialog, id ->
-                    addToFavs(repository, fact_id)
+                    addToFavs(context, repository, fact_id)
                 })
-            .setNegativeButton("No",
+            .setNegativeButton(resource.getString(R.string.facts_dialog_option2),
                 DialogInterface.OnClickListener { dialog, id ->
                     return@OnClickListener
                 })
@@ -118,7 +131,7 @@ class FactsRecyclerAdapter(private val factsDataList: MutableList<FactModel>, pr
         builder.show()
     }
 
-    private fun addToFavs(repository:FactsRepository, id:Int){
+    private fun addToFavs(context:Context, repository:FactsRepository, id:Int){
         val newFav = FavModel(0,id,1)
 
         GlobalScope.launch {
@@ -128,12 +141,18 @@ class FactsRecyclerAdapter(private val factsDataList: MutableList<FactModel>, pr
                 repository.addFavNum()
                 repository.insertFav(newFav)
 
-                fragment.factsViewModel.setData(repository,fragment.pb_facts)
+                fragment.factsViewModel.setFavs(repository)
+
+                (context as Activity).runOnUiThread(Runnable {
+                    Toast.makeText(fragment.sw_facts.context, "Added to fav. list", Toast.LENGTH_SHORT).show()
+                })
             }else{
-                Toast.makeText(fragment.sw_facts.context, "Fact already added", Toast.LENGTH_SHORT).show()
+
+                (context as Activity).runOnUiThread(Runnable {
+                    Toast.makeText(fragment.sw_facts.context, "Fact already added", Toast.LENGTH_SHORT).show()
+                })
             }
         }
 
-        Toast.makeText(fragment.sw_facts.context, "Added to fav. list", Toast.LENGTH_SHORT).show()
     }
 }

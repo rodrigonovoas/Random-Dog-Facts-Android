@@ -13,11 +13,18 @@
         android:layout_height="54dp"
         android:src="@drawable/dog1"/>
 
+    <ImageView
+        android:id="@+id/imv_fact_faved"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/fav"
+        android:visibility="invisible"/>
+
     <TextView
         android:id="@+id/tv_fact_row"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PRUEBA"
+        android:text=""
         android:layout_marginLeft="30dp"
         android:textSize="15dp"
         />

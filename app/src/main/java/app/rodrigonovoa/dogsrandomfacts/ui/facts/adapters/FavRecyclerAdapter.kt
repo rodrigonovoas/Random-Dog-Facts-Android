@@ -1,5 +1,6 @@
 package app.rodrigonovoa.dogsrandomfacts.ui.facts.adapters
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -28,9 +29,9 @@ class FavRecyclerAdapter(private val favDataList: MutableList<FavModel>, private
      * (custom ViewHolder).
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        lateinit var tv_fact: TextView
-        lateinit var imv_dog: ImageView
-        lateinit var ll_main: LinearLayout
+        var tv_fact: TextView
+        var imv_dog: ImageView
+        var ll_main: LinearLayout
 
         init {
             tv_fact = view.findViewById(R.id.tv_fact_row)
@@ -101,13 +102,14 @@ class FavRecyclerAdapter(private val favDataList: MutableList<FavModel>, private
     }
 
     private fun openDeleteFavDialog(context:Context, fav_id:Int, repository: FactsRepository){
+        val resource = context.resources
         val builder = AlertDialog.Builder(context)
-        builder.setMessage("Do you want to delete this fact from the list?")
-            .setPositiveButton("Yes",
+        builder.setMessage(resource.getString(R.string.facts_delete_dialog_title))
+            .setPositiveButton(resource.getString(R.string.facts_delete_option1),
                 DialogInterface.OnClickListener { dialog, id ->
                     deleteFav(repository, fav_id)
                 })
-            .setNegativeButton("No",
+            .setNegativeButton(resource.getString(R.string.facts_delete_option2),
                 DialogInterface.OnClickListener { dialog, id ->
                     return@OnClickListener
                 })
@@ -117,17 +119,21 @@ class FavRecyclerAdapter(private val favDataList: MutableList<FavModel>, private
     }
 
     private fun deleteFav(repository: FactsRepository, id:Int){
+        val context = fragment.sw_facts.context
+
 
         GlobalScope.launch {
             repository.subFavNum()
             repository.deleteFavById(id)
 
-            fragment.factsViewModel.setData(repository,fragment.pb_facts)
+            fragment.factsViewModel.setFavs(repository)
+
+            (context as Activity).runOnUiThread(Runnable {
+                fragment.reloadFavsList()
+            })
         }
 
-        fragment.sw_facts.isChecked = false
-
-        Toast.makeText(fragment.sw_facts.context, "Fav. deleted", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, context.resources.getString(R.string.facts_fav_deleted), Toast.LENGTH_SHORT).show()
     }
 
 }
