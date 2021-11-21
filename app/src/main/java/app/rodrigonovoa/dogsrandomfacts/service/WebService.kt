@@ -10,8 +10,12 @@ class WebService {
     private val retrofit: Retrofit
     private var mContext: Context? = null
 
-    constructor(context: Context){
+    constructor(context: Context, imageApi:Boolean=false){
         mContext = context
+
+        if(imageApi){
+            BASE_URL = "https://dog.ceo/api/"
+        }
 
         retrofit = Retrofit.Builder().
         baseUrl(BASE_URL).

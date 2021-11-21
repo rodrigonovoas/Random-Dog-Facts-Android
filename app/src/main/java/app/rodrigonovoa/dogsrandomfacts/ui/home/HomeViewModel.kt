@@ -2,6 +2,7 @@ package app.rodrigonovoa.dogsrandomfacts.ui.home
 
 import android.content.Context
 import android.util.Log
+import android.util.Log.i
 import android.view.View
 import android.widget.*
 import androidx.lifecycle.*
@@ -10,23 +11,27 @@ import app.rodrigonovoa.dogsrandomfacts.database.FactModel
 import app.rodrigonovoa.dogsrandomfacts.database.FactsRepository
 import app.rodrigonovoa.dogsrandomfacts.database.FavModel
 import app.rodrigonovoa.dogsrandomfacts.database.UserModel
+import app.rodrigonovoa.dogsrandomfacts.model.DogImage
 import app.rodrigonovoa.dogsrandomfacts.model.Fact
 import app.rodrigonovoa.dogsrandomfacts.service.WebService
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.Console
+import java.lang.Math.log
 
 class HomeViewModel : ViewModel() {
 
     private lateinit var change_pet:MutableLiveData<Boolean>
     private lateinit var show_toast:MutableLiveData<Boolean>
     private lateinit var currentFact:FactModel
+    private lateinit var petImageUrl:MutableLiveData<String>
     private var toast_text:String = ""
 
     fun init(){
         change_pet = MutableLiveData<Boolean>()
+        petImageUrl = MutableLiveData<String>()
         show_toast = MutableLiveData<Boolean>()
     }
 
@@ -40,6 +45,10 @@ class HomeViewModel : ViewModel() {
 
     fun change_pet():MutableLiveData<Boolean>{
         return this.change_pet
+    }
+
+    fun changePetImg():MutableLiveData<String>{
+        return this.petImageUrl
     }
 
     fun show_toast():MutableLiveData<Boolean>{
@@ -59,9 +68,7 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-   fun getFact(repository:FactsRepository, service:WebService, tv_facts: TextView, pb: ProgressBar){
-        pb.visibility = View.VISIBLE
-
+   fun getFact(repository:FactsRepository, service:WebService, tv_facts: TextView){
         viewModelScope.launch {
             val client = service.returnClientInterface()
 
@@ -80,13 +87,32 @@ class HomeViewModel : ViewModel() {
                             change_pet.value = true
                         }
                     }
-
-                    pb.visibility = View.INVISIBLE
-
                 }
 
                 override fun onFailure(call: Call<Fact>, t: Throwable) {
-                    pb.visibility = View.INVISIBLE
+                    Log.d("WebService",t.message!!.toString())
+                }
+            })
+        }
+    }
+
+    fun getDogImage(service:WebService, imv_dog:ImageView){
+        viewModelScope.launch {
+            val client = service.returnClientInterface()
+
+            val call: Call<DogImage> = client.getImageFromApi()
+            call!!.enqueue(object : Callback<DogImage> {
+
+                override fun onResponse(call: Call<DogImage>, response: Response<DogImage>) {
+                    val image: DogImage
+
+                    if (response.code() == 200){
+                        image = response.body()!!
+                        petImageUrl.value = image.message
+                    }
+                }
+
+                override fun onFailure(call: Call<DogImage>, t: Throwable) {
                     Log.d("WebService",t.message!!.toString())
                 }
             })

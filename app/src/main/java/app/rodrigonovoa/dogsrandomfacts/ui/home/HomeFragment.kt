@@ -15,10 +15,14 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import app.rodrigonovoa.dogsrandomfacts.R
 import app.rodrigonovoa.dogsrandomfacts.common.Prefs
 import app.rodrigonovoa.dogsrandomfacts.common.Singleton
 import app.rodrigonovoa.dogsrandomfacts.service.WebService
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class HomeFragment : Fragment() {
@@ -48,6 +52,7 @@ class HomeFragment : Fragment() {
         //home
         val tv_title:TextView = view.findViewById(R.id.tv_activity_title)
         val main_layout: RelativeLayout = view.findViewById(R.id.main_layout)
+        val imv_api_dog:ImageView = view.findViewById(R.id.imv_dog_image)
 
         //card
         val tv_fact:TextView = view.findViewById(R.id.tv_fact_text)
@@ -59,10 +64,15 @@ class HomeFragment : Fragment() {
         val pb_fact: ProgressBar = view.findViewById(R.id.pb_fact)
 
         tv_fact.text = ""
+        tv_fact.visibility = View.INVISIBLE
+        pb_fact.visibility = View.VISIBLE
         makeViewsVisibleOrInvisible(false,main_layout, tv_title, imv_dog, tv_fact, pb_fact)
 
         homeViewModel.init()
-        homeViewModel.getFact(repository,service,tv_fact,pb_fact)
+        homeViewModel.getFact(repository,service,tv_fact)
+        homeViewModel.getDogImage(WebService(requireContext(),true), imv_api_dog)
+
+        tv_title.text = prefs.name + " , " + tv_title.text.toString()
 
         homeViewModel.change_pet().observe(viewLifecycleOwner, Observer { it ->
             if(it){
@@ -75,11 +85,38 @@ class HomeFragment : Fragment() {
             if(it){
                 Toast.makeText(context,homeViewModel.getToastText(),Toast.LENGTH_SHORT).show()
             }
-        });
+        })
+
+        homeViewModel.changePetImg().observe(viewLifecycleOwner, Observer { it ->
+            if(it != ""){
+                val picasso = Picasso.get()
+
+                picasso
+                    .load(it)
+                    .into(imv_api_dog, object: com.squareup.picasso.Callback {
+                        override fun onSuccess() {
+                            imv_api_dog.visibility = View.VISIBLE
+                            tv_fact.visibility = View.VISIBLE
+                            pb_fact.visibility = View.INVISIBLE
+                        }
+
+                        override fun onError(e: java.lang.Exception?) {
+                            imv_api_dog.visibility = View.VISIBLE
+                            tv_fact.visibility = View.VISIBLE
+                            pb_fact.visibility = View.INVISIBLE
+                        }
+                    })
+
+            }
+        })
 
         imv_next_fact.setOnClickListener() {
             tv_fact.text = ""
-            homeViewModel.getFact(repository,service,tv_fact,pb_fact)
+            tv_fact.visibility = View.INVISIBLE
+            imv_api_dog.visibility = View.INVISIBLE
+            pb_fact.visibility = View.VISIBLE
+            homeViewModel.getDogImage(WebService(requireContext(), true), imv_api_dog)
+            homeViewModel.getFact(repository,service,tv_fact)
         }
 
         imv_fav.setOnClickListener(){
@@ -88,7 +125,7 @@ class HomeFragment : Fragment() {
 
         imv_share.setOnClickListener(){
             val tag = "%23RandomDogFact "
-            shareOnTwitter(tag + tv_fact.text.toString() + " by " + prefs.name)
+            shareOnTwitter(tag + tv_fact.text.toString())
 
             homeViewModel.addSharedNum(repository)
         }
@@ -122,12 +159,12 @@ class HomeFragment : Fragment() {
            // tv_title.visibility = View.VISIBLE
             imv_dog.visibility = View.VISIBLE
            // tv_fact.visibility = View.VISIBLE
-            pb.visibility = View.INVISIBLE
+            // pb.visibility = View.INVISIBLE
         }else{
             pb.visibility = View.VISIBLE
            // mainLayout.visibility = View.INVISIBLE
            // tv_title.visibility = View.INVISIBLE
-            imv_dog.visibility = View.INVISIBLE
+            // imv_dog.visibility = View.INVISIBLE
           //  tv_fact.visibility = View.INVISIBLE
         }
     }

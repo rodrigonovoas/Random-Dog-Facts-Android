@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DogsRandomFacts</string>
+    <string name="app_name">Random Dog Facts</string>
 
     <!-- ACTIVITIES -->
 
@@ -15,7 +15,7 @@
 
     <!-- Home Fragment -->
 
-    <string name="home_title">Did you know this fact...?</string>
+    <string name="home_title">did you know this fact...?</string>
 
     <string name="home_fav_added">Added to Fav list</string>
     <string name="home_text_copied">Text Copied</string>
