@@ -88,7 +88,7 @@ class DataFragment : Fragment() {
 
         imv_change_user.setOnClickListener(){
             val dialog = Dialog(requireActivity())
-            dataViewModel.openUsernameDialog(repository,dialog, tv_username)
+            dataViewModel.openUsernameDialog(repository,dialog, tv_username, prefs)
         }
 
 

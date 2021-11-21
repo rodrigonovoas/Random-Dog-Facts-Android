@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.*
 import app.rodrigonovoa.dogsrandomfacts.R
+import app.rodrigonovoa.dogsrandomfacts.common.Prefs
 import app.rodrigonovoa.dogsrandomfacts.database.FactsRepository
 import app.rodrigonovoa.dogsrandomfacts.database.UserModel
 import kotlinx.coroutines.launch
@@ -41,7 +42,7 @@ class DataViewModel : ViewModel() {
         dialog.show()
     }
 
-    fun openUsernameDialog(repository: FactsRepository, dialog:Dialog, tv_username:TextView){
+    fun openUsernameDialog(repository: FactsRepository, dialog:Dialog, tv_username:TextView, prefs: Prefs){
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
         dialog.setContentView(R.layout.dialog_enter_username)
@@ -56,6 +57,7 @@ class DataViewModel : ViewModel() {
             if(edt_username.text.isEmpty()==false){
                 val username = edt_username.text.toString()
                 insertUser(repository, username)
+                prefs.name = username
                 tv_username.text = context.getString(R.string.data_data_username) + username
                 dialog.dismiss()
             }else{

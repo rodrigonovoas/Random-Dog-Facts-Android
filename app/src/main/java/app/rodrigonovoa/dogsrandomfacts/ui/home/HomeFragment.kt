@@ -72,7 +72,9 @@ class HomeFragment : Fragment() {
         homeViewModel.getFact(repository,service,tv_fact)
         homeViewModel.getDogImage(WebService(requireContext(),true), imv_api_dog)
 
-        tv_title.text = prefs.name + " , " + tv_title.text.toString()
+        if(prefs.name != ""){
+            tv_title.text = prefs.name + " , " + tv_title.text.toString()
+        }
 
         homeViewModel.change_pet().observe(viewLifecycleOwner, Observer { it ->
             if(it){
