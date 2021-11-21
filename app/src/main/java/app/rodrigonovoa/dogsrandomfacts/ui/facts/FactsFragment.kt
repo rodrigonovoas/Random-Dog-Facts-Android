@@ -43,18 +43,15 @@ class FactsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val factsDB = FactRoomDb.getDatabase(requireContext(), lifecycleScope)
-
-        sw_facts = view.findViewById<Switch>(R.id.sw_facts)
         val imv_icon = view.findViewById<ImageView>(R.id.imv_icon)
-        pb_facts = view.findViewById<ProgressBar>(R.id.pb_facts)
-        layout_view = view
-
-        repository = FactsRepository(factsDB)
-
         val llm = LinearLayoutManager(this@FactsFragment.requireContext())
 
-        factsViewModel.init()
+        sw_facts = view.findViewById<Switch>(R.id.sw_facts)
+        pb_facts = view.findViewById<ProgressBar>(R.id.pb_facts)
+        layout_view = view
+        repository = FactsRepository(factsDB)
 
+        factsViewModel.init()
         factsViewModel.setData(repository)
 
         factsViewModel.reloadFragment().observe(viewLifecycleOwner, Observer { it ->
@@ -66,16 +63,13 @@ class FactsFragment : Fragment() {
         });
 
         sw_facts.setOnClickListener(){
-
             if(sw_facts.isChecked){
                 imv_icon.setImageDrawable(resources.getDrawable(R.drawable.fav))
                 reloadFavsList()
-                //factsViewModel.changeFactsToFavs(llm,view,factsViewModel.getFactsList(),factsViewModel.getFavsList(), this)
             }else{
                 imv_icon.setImageDrawable(resources.getDrawable(R.drawable.facts))
                 factsViewModel.changeFavsToFacts(llm,view,factsViewModel.getFactsList(), factsViewModel.getFavsIdList(), this)
             }
-
         }
     }
 

@@ -5,7 +5,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
-import android.graphics.Bitmap.CompressFormat
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,14 +14,11 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import app.rodrigonovoa.dogsrandomfacts.R
 import app.rodrigonovoa.dogsrandomfacts.common.Prefs
 import app.rodrigonovoa.dogsrandomfacts.common.Singleton
 import app.rodrigonovoa.dogsrandomfacts.service.WebService
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 
 class HomeFragment : Fragment() {
@@ -63,10 +59,7 @@ class HomeFragment : Fragment() {
         val imv_copy: ImageView = view.findViewById(R.id.imv_copy_text)
         val pb_fact: ProgressBar = view.findViewById(R.id.pb_fact)
 
-        tv_fact.text = ""
-        tv_fact.visibility = View.INVISIBLE
-        pb_fact.visibility = View.VISIBLE
-        makeViewsVisibleOrInvisible(false,main_layout, tv_title, imv_dog, tv_fact, pb_fact)
+        makeViewsInvisible(tv_fact, pb_fact)
 
         homeViewModel.init()
         homeViewModel.getFact(repository,service,tv_fact)
@@ -79,7 +72,6 @@ class HomeFragment : Fragment() {
         homeViewModel.change_pet().observe(viewLifecycleOwner, Observer { it ->
             if(it){
                 homeViewModel.getRandomPetDialog(main_layout, tv_title, imv_dog, tv_fact)
-                makeViewsVisibleOrInvisible(true,main_layout, tv_title, imv_dog, tv_fact, pb_fact)
             }
         });
 
@@ -113,10 +105,8 @@ class HomeFragment : Fragment() {
         })
 
         imv_next_fact.setOnClickListener() {
-            tv_fact.text = ""
-            tv_fact.visibility = View.INVISIBLE
             imv_api_dog.visibility = View.INVISIBLE
-            pb_fact.visibility = View.VISIBLE
+            makeViewsInvisible(tv_fact, pb_fact)
             homeViewModel.getDogImage(WebService(requireContext(), true), imv_api_dog)
             homeViewModel.getFact(repository,service,tv_fact)
         }
@@ -148,26 +138,9 @@ class HomeFragment : Fragment() {
         startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 
-    private fun makeViewsVisibleOrInvisible(
-        visible: Boolean = true,
-        mainLayout: RelativeLayout,
-        tv_title: TextView,
-        imv_dog: ImageView,
-        tv_fact: TextView,
-        pb: ProgressBar
-    ) {
-        if (visible) {
-           // mainLayout.visibility = View.VISIBLE
-           // tv_title.visibility = View.VISIBLE
-            imv_dog.visibility = View.VISIBLE
-           // tv_fact.visibility = View.VISIBLE
-            // pb.visibility = View.INVISIBLE
-        }else{
-            pb.visibility = View.VISIBLE
-           // mainLayout.visibility = View.INVISIBLE
-           // tv_title.visibility = View.INVISIBLE
-            // imv_dog.visibility = View.INVISIBLE
-          //  tv_fact.visibility = View.INVISIBLE
-        }
+    private fun makeViewsInvisible(tv_fact:TextView, pb_fact: ProgressBar){
+        tv_fact.text = ""
+        tv_fact.visibility = View.INVISIBLE
+        pb_fact.visibility = View.VISIBLE
     }
 }

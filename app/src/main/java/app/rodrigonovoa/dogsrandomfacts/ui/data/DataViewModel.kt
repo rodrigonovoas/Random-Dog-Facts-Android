@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 class DataViewModel : ViewModel() {
 
     fun loadDataFromDb(repository: FactsRepository, tv_username:TextView, tv_facts: TextView, tv_favs:TextView, tv_shared:TextView, tv_opened:TextView){
-
         viewModelScope.launch {
             tv_username.text = tv_username.text.toString() + repository.getUsername()
             tv_facts.text = tv_facts.text.toString() + repository.getFactsNum().toString()
@@ -24,7 +23,6 @@ class DataViewModel : ViewModel() {
             tv_shared.text = tv_shared.text.toString() + repository.getSharedNum().toString()
             tv_opened.text = tv_opened.text.toString() + repository.getOpenedNum().toString()
         }
-
     }
 
     fun openAboutUsDialog(dialog:Dialog){
@@ -54,7 +52,7 @@ class DataViewModel : ViewModel() {
         val context = btn_accept.context
 
         btn_accept.setOnClickListener(){
-            if(edt_username.text.isEmpty()==false){
+            if(!edt_username.text.isEmpty()){
                 val username = edt_username.text.toString()
                 insertUser(repository, username)
                 prefs.name = username

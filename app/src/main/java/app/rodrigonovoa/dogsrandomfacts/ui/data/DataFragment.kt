@@ -23,7 +23,6 @@ class DataFragment : Fragment() {
 
     private lateinit var dataViewModel: DataViewModel
 
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -62,12 +61,12 @@ class DataFragment : Fragment() {
         }
 
         imv_contactemail.setOnClickListener(){
-            if(tv_contactemail.visibility == View.VISIBLE){
+            val visibility = tv_contactemail.visibility
+            if(visibility == View.VISIBLE){
                 tv_contactemail.visibility = View.INVISIBLE
             }else{
                 tv_contactemail.visibility = View.VISIBLE
             }
-
         }
 
         imv_about.setOnClickListener(){
@@ -76,7 +75,6 @@ class DataFragment : Fragment() {
         }
 
         imv_skip_splash.setOnClickListener(){
-
             if(prefs.skip_splash){
                 prefs.skip_splash = false
                 tv_skip_splash.text = getString(R.string.data_data_no_skip)
@@ -88,9 +86,8 @@ class DataFragment : Fragment() {
 
         imv_change_user.setOnClickListener(){
             val dialog = Dialog(requireActivity())
-            dataViewModel.openUsernameDialog(repository,dialog, tv_username, prefs)
+            dataViewModel.openUsernameDialog(repository, dialog, tv_username, prefs)
         }
-
 
         dataViewModel.loadDataFromDb(repository, tv_username, tv_facts, tv_favs, tv_shared, tv_opened)
     }
